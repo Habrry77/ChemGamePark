@@ -3,397 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>共存接接乐 - 游戏介绍</title>
-    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../styles.css">
+    <title>化学游戏乐园 - ChemGamePark</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --color-primary: #667eea;
-            --color-secondary: #764ba2;
-            --color-accent: #e74c3c;
-            --color-success: #2ecc71;
-            --color-warning: #f39c12;
-            --color-bg-light: #f8f9fa;
-            --color-dark: #2c3e50;
-            --color-gray: #7f8c8d;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-primary);
-            text-decoration: none;
-        }
-
-        .logo-icon { font-size: 2rem; }
-
-        .logo-text-wrapper {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-
-        .logo-text { font-size: 1.5rem; font-weight: 700; }
-
-        .logo-subtitle {
-            font-size: 0.65rem;
-            font-weight: 400;
-            opacity: 0.7;
-            letter-spacing: 1px;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--color-primary);
-            text-decoration: none;
-            font-weight: 600;
-            padding: 10px 20px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 25px;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            background: var(--color-primary);
-            color: white;
-        }
-
-        .hero-section {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-            backdrop-filter: blur(20px);
-            padding: 60px 40px;
-            text-align: center;
-            border-bottom: 3px solid rgba(102, 126, 234, 0.2);
-        }
-
-        .game-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 15px;
-        }
-
-        .game-subtitle {
-            font-size: 1.3rem;
-            color: var(--color-gray);
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-game-icon {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 30px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .rating-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .rating-title { font-size: 1.1rem; color: var(--color-dark); font-weight: 600; }
-
-        .rating-display {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: white;
-            padding: 15px 30px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .rating-stars { display: flex; gap: 5px; cursor: pointer; }
-
-        .rating-stars .star {
-            color: #ddd;
-            font-size: 2rem;
-            transition: all 0.2s;
-        }
-
-        .rating-stars .star:hover,
-        .rating-stars .star.active { color: #f39c12; transform: scale(1.2); }
-
-        .rating-value { font-size: 1.8rem; font-weight: 700; color: var(--color-dark); min-width: 60px; text-align: center; }
-
-        .rating-hint { font-size: 0.9rem; color: var(--color-gray); margin-top: 10px; }
-
-        .start-btn-container { margin-top: 20px; }
-
-        .start-game-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            padding: 20px 60px;
-            background: linear-gradient(135deg, var(--color-accent), #c0392b);
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
-        }
-
-        .start-game-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 35px rgba(231, 76, 60, 0.5);
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .section-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--color-bg-light);
-        }
-
-        .section-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-        }
-
-        .section-title { font-size: 1.8rem; font-weight: 700; color: var(--color-dark); }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-        }
-
-        .feature-card {
-            background: var(--color-bg-light);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--color-primary);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-        }
-
-        .feature-icon { font-size: 4rem; margin-bottom: 20px; }
-        .feature-card h4 { font-size: 1.3rem; color: var(--color-dark); margin-bottom: 12px; }
-        .feature-card p { color: var(--color-gray); line-height: 1.7; }
-
-        .game-modes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-        }
-
-        .mode-card {
-            background: linear-gradient(135deg, var(--color-bg-light), white);
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 5px solid;
-            transition: all 0.3s;
-        }
-
-        .mode-card.teach { border-left-color: var(--color-primary); }
-        .mode-card.game { border-left-color: var(--color-accent); }
-
-        .mode-card:hover { transform: translateX(5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-
-        .mode-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .mode-icon { font-size: 2.5rem; }
-        .mode-card h4 { font-size: 1.3rem; color: var(--color-dark); margin: 0; }
-        .mode-card p { color: var(--color-gray); line-height: 1.7; }
-
-        .steps-timeline { position: relative; padding-left: 40px; }
-
-        .steps-timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary));
-            border-radius: 3px;
-        }
-
-        .step-item {
-            position: relative;
-            margin-bottom: 35px;
-            padding: 25px;
-            background: var(--color-bg-light);
-            border-radius: 15px;
-            transition: all 0.3s;
-        }
-
-        .step-item:hover { transform: translateX(10px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-
-        .step-number {
-            position: absolute;
-            left: -40px;
-            top: 20px;
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-        }
-
-        .step-item h4 { font-size: 1.2rem; color: var(--color-dark); margin-bottom: 10px; }
-        .step-item p { color: var(--color-gray); line-height: 1.7; margin: 0; }
-
-        .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .tip-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 20px;
-            background: var(--color-bg-light);
-            border-radius: 12px;
-        }
-
-        .tip-icon { font-size: 2rem; flex-shrink: 0; }
-        .tip-content h4 { font-size: 1.1rem; color: var(--color-dark); margin-bottom: 8px; }
-        .tip-content p { color: var(--color-gray); margin: 0; font-size: 0.95rem; }
-
-        .footer {
-            background: rgba(44, 62, 80, 0.95);
-            color: white;
-            padding: 30px 0;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        .footer p { margin: 0; opacity: 0.9; }
-
-        @media (max-width: 768px) {
-            .game-title { font-size: 2.2rem; }
-            .hero-section { padding: 40px 20px; }
-            .hero-game-icon { width: 120px; height: 120px; font-size: 4rem; }
-            .start-game-btn { padding: 15px 40px; font-size: 1.2rem; }
-            .section-card { padding: 25px; }
-            .section-title { font-size: 1.4rem; }
-            .steps-timeline { padding-left: 30px; }
-            .step-number { left: -30px; width: 30px; height: 30px; font-size: 0.9rem; }
-        }
-
-        @media (max-width: 480px) {
-            .hero-section { padding: 30px 15px; }
-            .game-title { font-size: 1.8rem; }
-            .game-subtitle { font-size: 1rem; }
-            .hero-game-icon { width: 100px; height: 100px; font-size: 3.5rem; }
-            .start-game-btn { padding: 14px 30px; font-size: 1.1rem; }
-            .section-card { padding: 20px 15px; }
-            .section-title { font-size: 1.4rem; }
-            .features-grid { grid-template-columns: 1fr; gap: 15px; }
-            .feature-card { padding: 20px; }
-            .feature-icon { font-size: 3rem; }
-            .game-modes { grid-template-columns: 1fr; gap: 15px; }
-            .mode-card { padding: 20px; }
-            .tips-grid { grid-template-columns: 1fr; gap: 12px; }
-            .tip-card { padding: 15px; }
-            .step-number { width: 28px; height: 28px; font-size: 0.9rem; left: -28px; }
-            .steps-timeline { padding-left: 28px; }
-            .step-item { padding: 15px; }
-            .step-item h4 { font-size: 1rem; }
-            .rating-section { padding: 15px 20px; }
-            .rating-stars .star { font-size: 1.5rem; }
-            .rating-value { font-size: 1.4rem; }
-            .logo-text { font-size: 1.1rem; }
-            .logo-subtitle { font-size: 0.55rem; }
-            .back-btn { padding: 6px 12px; font-size: 0.8rem; }
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -405,220 +20,103 @@
                     <span class="logo-subtitle">ChemGamePark</span>
                 </div>
             </div>
-            <a href="../../index.html" class="back-btn">← 返回首页</a>
+            <nav class="nav" id="mainNav">
+                <ul class="nav-list">
+                    <li><a href="#" class="nav-link active" data-category="all">全部游戏</a></li>
+                    <li><a href="#" class="nav-link" data-category="periodic">元素周期表</a></li>
+                    <li><a href="#" class="nav-link" data-category="reaction">化学反应</a></li>
+                    <li><a href="#" class="nav-link" data-category="molecule">分子结构</a></li>
+                    <li><a href="#" class="nav-link" data-category="quiz">知识问答</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <section class="hero-section">
-        <h1 class="game-title">共存接接乐</h1>
-        <p class="game-subtitle">天上掉落各种离子，接住能共存的离子凑成5个一组，注意阴阳平衡，避免不共存的离子混入！</p>
-
-        <div class="hero-game-icon">⚡</div>
-
-        <div class="rating-section">
-            <div class="rating-title">⭐ 给游戏评分</div>
-            <div class="rating-display">
-                <div class="rating-stars" id="ratingStars">
-                    <span class="star" data-rating="1">★</span>
-                    <span class="star" data-rating="2">★</span>
-                    <span class="star" data-rating="3">★</span>
-                    <span class="star" data-rating="4">★</span>
-                    <span class="star" data-rating="5">★</span>
-                </div>
-                <div class="rating-value" id="ratingValue">5.0</div>
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">探索化学世界的乐趣</h1>
+            <p class="hero-subtitle">通过有趣的游戏学习化学知识，让学习变得轻松愉快</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索游戏...">
+                <button class="search-btn" id="searchBtn">🔍</button>
             </div>
-            <div class="rating-hint">点击星星为游戏评分</div>
-        </div>
-
-        <div class="start-btn-container">
-            <a href="game.html" class="start-game-btn">
-                <span>🎮</span>
-                <span>开始游戏</span>
-            </a>
         </div>
     </section>
 
-    <div class="main-content">
-        <section class="section-card">
-            <div class="section-header">
-                <div class="section-icon">🎮</div>
-                <h2 class="section-title">游戏特色</h2>
+    <section class="filters">
+        <div class="container">
+            <div class="filter-group">
+                <span class="filter-label">难度：</span>
+                <button class="filter-btn active" data-difficulty="all">全部</button>
+                <button class="filter-btn" data-difficulty="easy">入门</button>
+                <button class="filter-btn" data-difficulty="medium">进阶</button>
+                <button class="filter-btn" data-difficulty="hard">挑战</button>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🧪</div>
-                    <h4>离子识别</h4>
-                    <p>认识各种阳离子和阴离子，学习它们的化学符号和名称</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚖️</div>
-                    <h4>电性平衡</h4>
-                    <p>每组5个离子必须同时包含阳离子和阴离子，保持电中性</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💥</div>
-                    <h4>共存判断</h4>
-                    <p>学会判断哪些离子能在溶液中共存，哪些会发生反应</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h4>反应模式</h4>
-                    <p>教学模式详细讲解共存原理，游戏模式考验你的反应速度</p>
-                </div>
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="grid" title="网格视图">▣</button>
+                <button class="view-btn" data-view="list" title="列表视图">☰</button>
             </div>
-        </section>
-
-        <section class="section-card">
-            <div class="section-header">
-                <div class="section-icon">🎯</div>
-                <h2 class="section-title">游戏模式</h2>
-            </div>
-            <div class="game-modes">
-                <div class="mode-card teach">
-                    <div class="mode-header">
-                        <div class="mode-icon">📖</div>
-                        <h4>教学模式</h4>
-                    </div>
-                    <p>详细展示每个离子的信息和共存规则，接住离子时会提示能否共存及原因，帮助你理解离子共存原理。</p>
-                </div>
-                <div class="mode-card game">
-                    <div class="mode-header">
-                        <div class="mode-icon">⚡</div>
-                        <h4>游戏模式</h4>
-                    </div>
-                    <p>离子从天而降，速度逐渐加快！快速判断并接住能共存的离子，凑齐5个一组得分，接错则游戏结束！</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section-card">
-            <div class="section-header">
-                <div class="section-icon">📖</div>
-                <h2 class="section-title">游戏玩法</h2>
-            </div>
-            <div class="steps-timeline">
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <h4>选择模式</h4>
-                    <p>教学模式适合初学者，有详细提示；游戏模式考验速度和判断力。</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <h4>观察掉落离子</h4>
-                    <p>各种阳离子（如Na⁺、K⁺）和阴离子（如Cl⁻、SO₄²⁻）从天上掉落，注意区分。</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">3</div>
-                    <h4>移动接住离子</h4>
-                    <p>用键盘左右方向键或鼠标移动底部的接收器，接住你认为能共存的离子。</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">4</div>
-                    <h4>凑齐5个得分</h4>
-                    <p>接满5个不冲突的离子且阴阳离子都有，自动清空并得分。每接住1个得1分。</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">5</div>
-                    <h4>避免不共存离子</h4>
-                    <p>如果接住了与当前已接离子不共存的离子，游戏立即结束！</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section-card">
-            <div class="section-header">
-                <div class="section-icon">💡</div>
-                <h2 class="section-title">游戏技巧</h2>
-            </div>
-            <div class="tips-grid">
-                <div class="tip-card">
-                    <div class="tip-icon">💡</div>
-                    <div class="tip-content">
-                        <h4>记住不共存规则</h4>
-                        <p>H⁺与OH⁻、CO₃²⁻、SO₃²⁻不共存；Ag⁺与Cl⁻、Br⁻、I⁻不共存；Ba²⁺与SO₄²⁻不共存。</p>
-                    </div>
-                </div>
-                <div class="tip-card">
-                    <div class="tip-icon">⚖️</div>
-                    <div class="tip-content">
-                        <h4>保持阴阳平衡</h4>
-                        <p>5个离子中必须同时有阳离子和阴离子，否则无法清空得分。</p>
-                    </div>
-                </div>
-                <div class="tip-card">
-                    <div class="tip-icon">⚡</div>
-                    <div class="tip-content">
-                        <h4>果断放弃</h4>
-                        <p>遇到不确定的离子，宁可让它们掉落也不要冒险接住，安全第一！</p>
-                    </div>
-                </div>
-                <div class="tip-card">
-                    <div class="tip-icon">📝</div>
-                    <div class="tip-content">
-                        <h4>学习反应原理</h4>
-                        <p>不共存本质上是因为会发生反应：生成沉淀、气体或弱电解质。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="start-btn-container" style="text-align: center; margin: 40px 0;">
-            <a href="game.html" class="start-game-btn">
-                <span>🎮</span>
-                <span>开始游戏</span>
-            </a>
         </div>
-    </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">热门游戏</h2>
+                <div class="sort-select">
+                    <select id="sortSelect">
+                        <option value="popular">最受欢迎</option>
+                        <option value="rating">评分最高</option>
+                        <option value="newest">最新上架</option>
+                        <option value="name">名称排序</option>
+                    </select>
+                </div>
+            </div>
+            <div class="games-grid" id="gamesGrid">
+            </div>
+            <div class="no-results" id="noResults" style="display: none;">
+                <p>没有找到匹配的游戏，请尝试其他关键词。</p>
+            </div>
+        </div>
+    </main>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 化学游戏乐园 (ChemGamePark). 探索化学的无限可能。</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>关于化学教育</h3>
+                    <p>化学是一门充满探索与发现的科学。通过互动游戏，我们让化学学习变得更加生动有趣，激发好奇心，培养科学思维。</p>
+                </div>
+                <div class="footer-section">
+                    <h3>相关资源</h3>
+                    <ul class="resource-links">
+                        <li><a href="#">国际纯粹与应用化学联合会</a></li>
+                        <li><a href="#">中国化学会</a></li>
+                        <li><a href="#">元素周期表数据库</a></li>
+                        <li><a href="#">化学教育资源库</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul class="contact-info">
+                        <li>📧 contact@chemgame.com</li>
+                        <li>🌐 www.chemgame.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 化学游戏乐园 (ChemGamePark). 探索化学的无限可能。</p>
+            </div>
         </div>
     </footer>
 
-    <script>
-        let currentRating = 5.0;
-        let userRating = 0;
-        const storageKey = 'ionCatcherUserRating';
-
-        function initRating() {
-            const storedRating = localStorage.getItem(storageKey);
-            if (storedRating) {
-                userRating = parseInt(storedRating);
-                currentRating = userRating;
-                updateRatingDisplay(userRating);
-            } else {
-                updateRatingDisplay(0);
-            }
-        }
-
-        function updateRatingDisplay(rating) {
-            const stars = document.querySelectorAll('#ratingStars .star');
-            stars.forEach((star, index) => {
-                star.classList.toggle('active', index < rating);
-            });
-            document.getElementById('ratingValue').textContent = currentRating.toFixed(1);
-        }
-
-        document.querySelectorAll('#ratingStars .star').forEach(star => {
-            star.addEventListener('mouseenter', () => {
-                const rating = parseInt(star.dataset.rating);
-                document.querySelectorAll('#ratingStars .star').forEach((s, i) => {
-                    s.classList.toggle('active', i < rating);
-                });
-            });
-            star.addEventListener('mouseleave', () => updateRatingDisplay(userRating));
-            star.addEventListener('click', () => {
-                const rating = parseInt(star.dataset.rating);
-                userRating = rating;
-                currentRating = rating;
-                localStorage.setItem(storageKey, rating.toString());
-                updateRatingDisplay(rating);
-                alert(`感谢您的评分！您给出了 ${rating} 颗星！⭐`);
-            });
-        });
-
-        initRating();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
