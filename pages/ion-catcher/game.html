@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共存接接乐 - 游戏</title>
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #667eea;
+            --color-secondary: #764ba2;
+            --color-accent: #e74c3c;
+            --color-success: #2ecc71;
+            --color-warning: #f39c12;
+            --color-bg: #f0f2f5;
+            --color-dark: #2c3e50;
+            --color-gray: #7f8c8d;
+            --color-cation: #3498db;
+            --color-anion: #e74c3c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--color-bg);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .game-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        .logo-icon { font-size: 1.8rem; }
+
+        .logo-text-wrapper { display: flex; flex-direction: column; line-height: 1.2; }
+        .logo-text { font-size: 1.3rem; font-weight: 700; }
+        .logo-subtitle { font-size: 0.6rem; font-weight: 400; opacity: 0.7; letter-spacing: 1px; }
+
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover { background: var(--color-primary); color: white; }
+
+        .mode-selector {
+            background: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .mode-btn {
+            padding: 10px 28px;
+            border: 2px solid var(--color-primary);
+            border-radius: 25px;
+            background: white;
+            color: var(--color-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn:hover { background: var(--color-primary); color: white; }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            border-color: transparent;
+        }
+
+        .game-area {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .sidebar-section { padding: 15px; border-bottom: 1px solid #e0e0e0; }
+
+        .sidebar-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .current-ions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 50px;
+        }
+
+        .ion-slot {
+            width: 44px;
+            height: 44px;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #bbb;
+            transition: all 0.3s;
+        }
+
+        .ion-slot.filled {
+            border-style: solid;
+            color: white;
+            font-size: 0.7rem;
+            animation: popIn 0.3s ease;
+        }
+
+        .ion-slot.filled.cation { border-color: var(--color-cation); background: var(--color-cation); }
+        .ion-slot.filled.anion { border-color: var(--color-anion); background: var(--color-anion); }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .ion-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: var(--color-bg);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-dot.cation { background: var(--color-cation); }
+        .legend-dot.anion { background: var(--color-anion); }
+
+        .rules-list {
+            font-size: 0.82rem;
+            color: var(--color-gray);
+            line-height: 1.8;
+        }
+
+        .rules-list li { margin-bottom: 4px; }
+
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(180deg, #e8ecf1 0%, #d5dce6 100%);
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .info-panel {
+            width: 300px;
+            background: white;
+            border-left: 1px solid #e0e0e0;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .info-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--color-bg);
+        }
+
+        .info-item { margin-bottom: 15px; }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--color-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .info-value { font-size: 1rem; font-weight: 600; color: var(--color-dark); }
+
+        .info-description { font-size: 0.9rem; color: var(--color-gray); line-height: 1.7; }
+
+        .teach-hint {
+            background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--color-primary);
+            font-size: 0.9rem;
+            color: var(--color-dark);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .teach-hint.show { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-icon { font-size: 5rem; margin-bottom: 20px; }
+        .modal-title { font-size: 1.8rem; font-weight: 700; color: var(--color-dark); margin-bottom: 15px; }
+        .modal-text { color: var(--color-gray); margin-bottom: 25px; line-height: 1.7; }
+        .modal-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+
+        .modal-btn {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-primary { background: var(--color-primary); color: white; }
+        .modal-btn-primary:hover { background: var(--color-secondary); }
+        .modal-btn-secondary { background: #ecf0f1; color: var(--color-dark); }
+        .modal-btn-secondary:hover { background: #d0d0d0; }
+        .modal-btn-danger { background: var(--color-accent); color: white; }
+        .modal-btn-danger:hover { background: #c0392b; }
+
+        .hud {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        .hud-item {
+            background: rgba(255,255,255,0.95);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: var(--color-dark);
+        }
+
+        .hud-item.score { color: var(--color-primary); }
+        .hud-item.combo { color: var(--color-warning); }
+
+        .flash-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 15;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .flash-overlay.success { background: rgba(46, 204, 113, 0.3); opacity: 1; }
+        .flash-overlay.fail { background: rgba(231, 76, 60, 0.3); opacity: 1; }
+
+        @media (max-width: 1024px) {
+            .sidebar { width: 200px; }
+            .info-panel { width: 240px; }
+        }
+
+        @media (max-width: 768px) {
+            .game-area { flex-direction: column; }
+            .sidebar { width: 100%; flex-direction: row; border-right: none; border-bottom: 1px solid #e0e0e0; max-height: 90px; }
+            .sidebar-section { flex: 1; }
+            .info-panel { width: 100%; border-left: none; border-top: 1px solid #e0e0e0; max-height: 160px; }
+            .canvas-container { min-height: 350px; }
+        }
+
+        @media (max-width: 480px) {
+            .game-area { flex-direction: column; }
+            .sidebar { width: 100%; flex-direction: row; border-right: none; border-bottom: 1px solid #e0e0e0; max-height: 80px; overflow-x: auto; }
+            .sidebar-section { flex: 0 0 auto; min-width: 150px; }
+            .info-panel { width: 100%; border-left: none; border-top: 1px solid #e0e0e0; max-height: 150px; padding: 12px; }
+            .canvas-container { min-height: 300px; flex: 1; }
+            .hud { gap: 8px; }
+            .hud-item { padding: 5px 12px; font-size: 0.85rem; }
+            .mode-btn { padding: 8px 16px; font-size: 0.85rem; }
+            .modal-content { padding: 25px 20px; }
+            .modal-icon { font-size: 3rem; }
+            .modal-title { font-size: 1.4rem; }
+            .current-ions { gap: 4px; }
+            .ion-slot { width: 36px; height: 36px; font-size: 0.6rem; }
+            .rules-list { font-size: 0.75rem; }
+            .logo-text { font-size: 1.1rem; }
+            .logo-subtitle { font-size: 0.55rem; }
+            .back-btn { padding: 6px 12px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <header class="header">
+            <div class="container">
+                <a href="intro.html" class="logo">
+                    <span class="logo-icon">🧪</span>
+                    <div class="logo-text-wrapper">
+                        <span class="logo-text">化学游戏乐园</span>
+                        <span class="logo-subtitle">ChemGamePark</span>
+                    </div>
+                </a>
+                <div class="header-actions">
+                    <a href="intro.html" class="back-btn">← 介绍</a>
+                </div>
+            </div>
+        </header>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="teach">📖 教学模式</button>
+            <button class="mode-btn" data-mode="game">⚡ 游戏模式</button>
+        </div>
+
+        <div class="game-area">
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">📦 当前离子 (0/5)</h3>
+                    <div class="current-ions" id="currentIons">
+                        <div class="ion-slot">1</div>
+                        <div class="ion-slot">2</div>
+                        <div class="ion-slot">3</div>
+                        <div class="ion-slot">4</div>
+                        <div class="ion-slot">5</div>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">🎨 图例</h3>
+                    <div class="ion-legend">
+                        <div class="legend-item"><div class="legend-dot cation"></div> 阳离子（带正电荷）</div>
+                        <div class="legend-item"><div class="legend-dot anion"></div> 阴离子（带负电荷）</div>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">⚠️ 不共存规则</h3>
+                    <ul class="rules-list">
+                        <li>H⁺ 与 OH⁻、CO₃²⁻、SO₃²⁻、HCO₃⁻</li>
+                        <li>Ag⁺ 与 Cl⁻、Br⁻、I⁻</li>
+                        <li>Ba²⁺ 与 SO₄²⁻、CO₃²⁻、SO₃²⁻</li>
+                        <li>Fe³⁺ 与 OH⁻、CO₃²⁻</li>
+                        <li>Ca²⁺ 与 CO₃²⁻、SO₃²⁻</li>
+                        <li>Cu²⁺ 与 OH⁻、CO₃²⁻、S²⁻</li>
+                        <li>NH₄⁺ 与 OH⁻</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="canvas-container">
+                <div class="hud">
+                    <div class="hud-item score">🏆 得分：<span id="scoreValue">0</span></div>
+                    <div class="hud-item combo">🔥 连续：<span id="comboValue">0</span> 组</div>
+                </div>
+                <div class="flash-overlay" id="flashOverlay"></div>
+                <canvas id="gameCanvas"></canvas>
+            </div>
+
+            <aside class="info-panel" id="infoPanel">
+                <h3 class="info-title">ℹ️ 离子信息</h3>
+                <div class="info-item">
+                    <div class="info-label">最近接住的离子</div>
+                    <div class="info-value" id="infoIon">等待中...</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">离子类型</div>
+                    <div class="info-value" id="infoType">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">说明</div>
+                    <div class="info-description" id="infoDesc">等待接住第一个离子</div>
+                </div>
+                <div class="teach-hint" id="teachHint"></div>
+            </aside>
+        </div>
+    </div>
+
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon">🎉</div>
+            <h2 class="modal-title" id="successTitle">太棒了！</h2>
+            <p class="modal-text" id="successText">成功凑齐5个共存离子！</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" id="continueBtn">继续游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <div class="modal-icon">💥</div>
+            <h2 class="modal-title">游戏结束！</h2>
+            <p class="modal-text" id="gameOverText">接到了不共存的离子！</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" id="restartBtn">重新开始</button>
+                <button class="modal-btn modal-btn-secondary" id="backToIntroBtn">返回介绍</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ========== ION DATA ==========
+    const IONS = [
+        // Cations
+        { symbol: 'Na⁺', name: '钠离子', charge: 1, type: 'cation', desc: '碱金属离子，性质稳定，与大多数阴离子共存' },
+        { symbol: 'K⁺', name: '钾离子', charge: 1, type: 'cation', desc: '碱金属离子，性质稳定，与大多数阴离子共存' },
+        { symbol: 'Ca²⁺', name: '钙离子', charge: 2, type: 'cation', desc: '碱土金属离子，不能与CO₃²⁻、SO₃²⁻共存（生成沉淀）' },
+        { symbol: 'Ba²⁺', name: '钡离子', charge: 2, type: 'cation', desc: '不能与SO₄²⁻、CO₃²⁻、SO₃²⁻共存（生成沉淀）' },
+        { symbol: 'Ag⁺', name: '银离子', charge: 1, type: 'cation', desc: '不能与Cl⁻、Br⁻、I⁻共存（生成不溶性卤化银）' },
+        { symbol: 'Fe³⁺', name: '铁离子', charge: 3, type: 'cation', desc: '不能与OH⁻、CO₃²⁻共存（生成沉淀）' },
+        { symbol: 'Cu²⁺', name: '铜离子', charge: 2, type: 'cation', desc: '不能与OH⁻、CO₃²⁻、S²⁻共存（生成沉淀）' },
+        { symbol: 'NH₄⁺', name: '铵根离子', charge: 1, type: 'cation', desc: '不能与OH⁻共存（加热产生氨气）' },
+        { symbol: 'H⁺', name: '氢离子', charge: 1, type: 'cation', desc: '不能与OH⁻、CO₃²⁻、SO₃²⁻、HCO₃⁻共存（发生反应）' },
+        { symbol: 'Mg²⁺', name: '镁离子', charge: 2, type: 'cation', desc: '不能与OH⁻、CO₃²⁻共存（生成沉淀）' },
+        { symbol: 'Al³⁺', name: '铝离子', charge: 3, type: 'cation', desc: '不能与OH⁻、CO₃²⁻共存（生成沉淀）' },
+        { symbol: 'Zn²⁺', name: '锌离子', charge: 2, type: 'cation', desc: '不能与OH⁻、CO₃²⁻、S²⁻共存（生成沉淀）' },
+        // Anions
+        { symbol: 'Cl⁻', name: '氯离子', charge: -1, type: 'anion', desc: '卤素离子，不能与Ag⁺共存（生成AgCl沉淀）' },
+        { symbol: 'Br⁻', name: '溴离子', charge: -1, type: 'anion', desc: '卤素离子，不能与Ag⁺共存（生成AgBr沉淀）' },
+        { symbol: 'I⁻', name: '碘离子', charge: -1, type: 'anion', desc: '卤素离子，不能与Ag⁺共存（生成AgI沉淀）' },
+        { symbol: 'SO₄²⁻', name: '硫酸根离子', charge: -2, type: 'anion', desc: '不能与Ba²⁺共存（生成BaSO₄沉淀）' },
+        { symbol: 'CO₃²⁻', name: '碳酸根离子', charge: -2, type: 'anion', desc: '不能与H⁺、Ca²⁺、Ba²⁺、Fe³⁺、Cu²⁺、Mg²⁺、Al³⁺、Zn²⁺共存' },
+        { symbol: 'NO₃⁻', name: '硝酸根离子', charge: -1, type: 'anion', desc: '几乎与所有阳离子共存，是典型的"百搭"阴离子' },
+        { symbol: 'OH⁻', name: '氢氧根离子', charge: -1, type: 'anion', desc: '不能与H⁺、NH₄⁺、Fe³⁺、Cu²⁺、Mg²⁺、Al³⁺、Zn²⁺共存' },
+        { symbol: 'SO₃²⁻', name: '亚硫酸根离子', charge: -2, type: 'anion', desc: '不能与H⁺、Ba²⁺共存（生成沉淀或气体）' },
+        { symbol: 'S²⁻', name: '硫离子', charge: -2, type: 'anion', desc: '不能与Cu²⁺、Zn²⁺共存（生成有色沉淀）' },
+        { symbol: 'HCO₃⁻', name: '碳酸氢根离子', charge: -1, type: 'anion', desc: '不能与H⁺、OH⁻共存（发生反应生成气体）' },
+    ];
+
+    // Incompatibility rules: pairs that cannot coexist
+    const INCOMPATIBLE_PAIRS = [
+        ['H⁺', 'OH⁻'], ['H⁺', 'CO₃²⁻'], ['H⁺', 'SO₃²⁻'], ['H⁺', 'HCO₃⁻'],
+        ['Ag⁺', 'Cl⁻'], ['Ag⁺', 'Br⁻'], ['Ag⁺', 'I⁻'],
+        ['Ba²⁺', 'SO₄²⁻'], ['Ba²⁺', 'CO₃²⁻'], ['Ba²⁺', 'SO₃²⁻'],
+        ['Fe³⁺', 'OH⁻'], ['Fe³⁺', 'CO₃²⁻'],
+        ['Ca²⁺', 'CO₃²⁻'], ['Ca²⁺', 'SO₃²⁻'],
+        ['Cu²⁺', 'OH⁻'], ['Cu²⁺', 'CO₃²⁻'], ['Cu²⁺', 'S²⁻'],
+        ['NH₄⁺', 'OH⁻'],
+        ['Mg²⁺', 'OH⁻'], ['Mg²⁺', 'CO₃²⁻'],
+        ['Al³⁺', 'OH⁻'], ['Al³⁺', 'CO₃²⁻'],
+        ['Zn²⁺', 'OH⁻'], ['Zn²⁺', 'CO₃²⁻'], ['Zn²⁺', 'S²⁻'],
+        ['OH⁻', 'HCO₃⁻'],
+    ];
+
+    // ========== GAME STATE ==========
+    let currentMode = 'teach';
+    let score = 0;
+    let combo = 0;
+    let collectedIons = [];
+    let fallingIons = [];
+    let catcher = { x: 0, width: 100, height: 20 };
+    let gameRunning = false;
+    let animFrameId = null;
+    let spawnTimer = 0;
+    let spawnInterval = 55; // frames
+    let fallSpeed = 4;
+    let canvas, ctx;
+    let keysPressed = {};
+    let lastTime = 0;
+
+    // ========== INIT ==========
+    function init() {
+        canvas = document.getElementById('gameCanvas');
+        ctx = canvas.getContext('2d');
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Keyboard controls
+        document.addEventListener('keydown', e => {
+            keysPressed[e.key] = true;
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') e.preventDefault();
+        });
+        document.addEventListener('keyup', e => { keysPressed[e.key] = false; });
+
+        // Mouse/touch controls
+        canvas.addEventListener('mousemove', e => {
+            if (!gameRunning) return;
+            const rect = canvas.getBoundingClientRect();
+            catcher.x = (e.clientX - rect.left) * (canvas.width / rect.width) - catcher.width / 2;
+            clampCatcher();
+        });
+
+        canvas.addEventListener('touchmove', e => {
+            if (!gameRunning) return;
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            catcher.x = (touch.clientX - rect.left) * (canvas.width / rect.width) - catcher.width / 2;
+            clampCatcher();
+        }, { passive: false });
+
+        // Mode buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                resetGame();
+                startGame();
+            });
+        });
+
+        // Modal buttons
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            hideModal('successModal');
+            if (gameRunning) requestAnimationFrame(gameLoop);
+        });
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            hideModal('gameOverModal');
+            resetGame();
+            startGame();
+        });
+        document.getElementById('backToIntroBtn').addEventListener('click', () => {
+            window.location.href = 'intro.html';
+        });
+
+        resetGame();
+        startGame();
+    }
+
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        catcher.x = canvas.width / 2 - catcher.width / 2;
+    }
+
+    function clampCatcher() {
+        catcher.x = Math.max(0, Math.min(canvas.width - catcher.width, catcher.x));
+    }
+
+    // ========== GAME LOGIC ==========
+    function resetGame() {
+        score = 0;
+        combo = 0;
+        collectedIons = [];
+        fallingIons = [];
+        spawnTimer = 0;
+        spawnInterval = currentMode === 'teach' ? 80 : 55;
+        fallSpeed = currentMode === 'teach' ? 3 : 4;
+        updateUI();
+        updateIonSlots();
+    }
+
+    function startGame() {
+        gameRunning = true;
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        lastTime = performance.now();
+        requestAnimationFrame(gameLoop);
+    }
+
+    function gameLoop(timestamp) {
+        if (!gameRunning) return;
+
+        const dt = Math.min((timestamp - lastTime) / 16.67, 3); // normalize to ~60fps
+        lastTime = timestamp;
+
+        update(dt);
+        draw();
+
+        animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    function update(dt) {
+        // Move catcher with keyboard
+        const speed = 8 * dt;
+        if (keysPressed['ArrowLeft'] || keysPressed['a'] || keysPressed['A']) {
+            catcher.x -= speed;
+        }
+        if (keysPressed['ArrowRight'] || keysPressed['d'] || keysPressed['D']) {
+            catcher.x += speed;
+        }
+        clampCatcher();
+
+        // Spawn new ions
+        spawnTimer += dt;
+        if (spawnTimer >= spawnInterval / 60 * 60) {
+            spawnTimer = 0;
+            spawnIon();
+        }
+
+        // Update falling ions
+        const currentFallSpeed = fallSpeed * dt;
+        for (let i = fallingIons.length - 1; i >= 0; i--) {
+            const ion = fallingIons[i];
+            ion.y += currentFallSpeed * (1 + score * 0.005); // gradually speed up
+
+            // Check if caught by catcher
+            const catcherTop = canvas.height - 40;
+            if (ion.y + 25 >= catcherTop && ion.y + 25 <= catcherTop + catcher.height + 10) {
+                if (ion.x + 25 >= catcher.x && ion.x - 25 <= catcher.x + catcher.width) {
+                    catchIon(ion, i);
+                    continue;
+                }
+            }
+
+            // Remove if off screen
+            if (ion.y > canvas.height + 30) {
+                fallingIons.splice(i, 1);
+            }
+        }
+    }
+
+    function spawnIon() {
+        const ion = IONS[Math.floor(Math.random() * IONS.length)];
+        const x = 40 + Math.random() * (canvas.width - 80);
+        fallingIons.push({
+            ...ion,
+            x: x,
+            y: -30,
+            id: Date.now() + Math.random()
+        });
+    }
+
+    function catchIon(ion, index) {
+        fallingIons.splice(index, 1);
+
+        // Check incompatibility with all collected ions
+        const conflictingIon = getConflictingIon(ion);
+        if (conflictingIon) {
+            // Game over - incompatible!
+            gameRunning = false;
+            flashScreen('fail');
+            showGameOver(ion, conflictingIon);
+            return;
+        }
+
+        // Add to collection
+        collectedIons.push(ion);
+        score += 1;
+        updateUI();
+        updateIonSlots();
+        updateIonInfo(ion);
+
+        // Check if we have 5 ions
+        if (collectedIons.length >= 5) {
+            // Check charge balance (must have both cation and anion)
+            const hasCation = collectedIons.some(i => i.type === 'cation');
+            const hasAnion = collectedIons.some(i => i.type === 'anion');
+
+            if (hasCation && hasAnion) {
+                // Success!
+                combo++;
+                flashScreen('success');
+                collectedIons = [];
+                updateIonSlots();
+            }
+            // If not balanced, player can keep going (ions stay, need to replace)
+        }
+
+        // Teach mode hint
+        if (currentMode === 'teach') {
+            showTeachHint(ion);
+        }
+    }
+
+    function getConflictingIon(newIon) {
+        for (const collected of collectedIons) {
+            for (const [a, b] of INCOMPATIBLE_PAIRS) {
+                if ((newIon.symbol === a && collected.symbol === b) ||
+                    (newIon.symbol === b && collected.symbol === a)) {
+                    return collected;
+                }
+            }
+        }
+        return null;
+    }
+
+    function canCoexistWithAll(newIon) {
+        return getConflictingIon(newIon) === null;
+    }
+
+    // ========== UI UPDATES ==========
+    function updateUI() {
+        document.getElementById('scoreValue').textContent = score;
+        document.getElementById('comboValue').textContent = combo;
+    }
+
+    function updateIonSlots() {
+        const container = document.getElementById('currentIons');
+        let html = '';
+        for (let i = 0; i < 5; i++) {
+            if (i < collectedIons.length) {
+                const ion = collectedIons[i];
+                html += `<div class="ion-slot filled ${ion.type}" title="${ion.name}">${ion.symbol}</div>`;
+            } else {
+                html += `<div class="ion-slot">${i + 1}</div>`;
+            }
+        }
+        container.innerHTML = html;
+        // Update count in title
+        const title = container.parentElement.querySelector('.sidebar-title');
+        title.textContent = `📦 当前离子 (${collectedIons.length}/5)`;
+    }
+
+    function updateIonInfo(ion) {
+        document.getElementById('infoIon').textContent = `${ion.symbol} (${ion.name})`;
+        document.getElementById('infoType').textContent = ion.type === 'cation' ? '阳离子 ⬆️' : '阴离子 ⬇️';
+        document.getElementById('infoDesc').textContent = ion.desc;
+    }
+
+    function showTeachHint(ion) {
+        const hint = document.getElementById('teachHint');
+        const hasCation = collectedIons.some(i => i.type === 'cation');
+        const hasAnion = collectedIons.some(i => i.type === 'anion');
+
+        let message = `✅ <b>${ion.symbol}</b> 可以与当前所有离子共存！`;
+        if (collectedIons.length >= 4) {
+            if (!hasCation) {
+                message += `<br>⚠️ 注意：当前没有阳离子，需要接一个阳离子才能清空！`;
+            } else if (!hasAnion) {
+                message += `<br>⚠️ 注意：当前没有阴离子，需要接一个阴离子才能清空！`;
+            } else {
+                message += `<br>🎯 阴阳离子齐全，再接1个兼容的离子即可清空得分！`;
+            }
+        } else if (collectedIons.length > 0 && (!hasCation || !hasAnion)) {
+            if (!hasCation) {
+                message += `<br>💡 提示：目前只有阴离子，建议接下来接阳离子。`;
+            } else {
+                message += `<br>💡 提示：目前只有阳离子，建议接下来接阴离子。`;
+            }
+        }
+
+        hint.innerHTML = message;
+        hint.classList.add('show');
+        clearTimeout(hint._timeout);
+        hint._timeout = setTimeout(() => hint.classList.remove('show'), 4000);
+    }
+
+    function flashScreen(type) {
+        const overlay = document.getElementById('flashOverlay');
+        overlay.className = 'flash-overlay ' + type;
+        setTimeout(() => { overlay.className = 'flash-overlay'; }, 500);
+    }
+
+    function showSuccess() {
+        document.getElementById('successTitle').textContent = '太棒了！';
+        document.getElementById('successText').innerHTML =
+            `成功凑齐5个共存离子！<br>本组得分：+5 | 累计得分：${score}<br>已完成 ${combo} 组`;
+        showModal('successModal');
+    }
+
+    function showGameOver(badIon, conflictingIon) {
+        const reason = getConflictReason(badIon, conflictingIon);
+        document.getElementById('gameOverText').innerHTML =
+            `你接住了 <b>${badIon.symbol}</b>，但它与已收集的 <b>${conflictingIon.symbol}</b> 不能共存！<br><br>${reason}<br><br>最终得分：${score} | 完成组数：${combo}`;
+        showModal('gameOverModal');
+    }
+
+    function getConflictReason(ionA, ionB) {
+        const reasons = {
+            'H⁺-OH⁻': 'H⁺ + OH⁻ → H₂O（生成水）',
+            'H⁺-CO₃²⁻': 'H⁺ + CO₃²⁻ → H₂O + CO₂↑（产生气体）',
+            'H⁺-SO₃²⁻': 'H⁺ + SO₃²⁻ → H₂O + SO₂↑（产生气体）',
+            'H⁺-HCO₃⁻': 'H⁺ + HCO₃⁻ → H₂O + CO₂↑（产生气体）',
+            'Ag⁺-Cl⁻': 'Ag⁺ + Cl⁻ → AgCl↓（白色沉淀）',
+            'Ag⁺-Br⁻': 'Ag⁺ + Br⁻ → AgBr↓（淡黄色沉淀）',
+            'Ag⁺-I⁻': 'Ag⁺ + I⁻ → AgI↓（黄色沉淀）',
+            'Ba²⁺-SO₄²⁻': 'Ba²⁺ + SO₄²⁻ → BaSO₄↓（白色沉淀）',
+            'Ba²⁺-CO₃²⁻': 'Ba²⁺ + CO₃²⁻ → BaCO₃↓（白色沉淀）',
+            'Ba²⁺-SO₃²⁻': 'Ba²⁺ + SO₃²⁻ → BaSO₃↓（白色沉淀）',
+            'Fe³⁺-OH⁻': 'Fe³⁺ + 3OH⁻ → Fe(OH)₃↓（红褐色沉淀）',
+            'Fe³⁺-CO₃²⁻': 'Fe³⁺ + CO₃²⁻ → Fe₂(CO₃)₃↓（沉淀）',
+            'Ca²⁺-CO₃²⁻': 'Ca²⁺ + CO₃²⁻ → CaCO₃↓（白色沉淀）',
+            'Ca²⁺-SO₃²⁻': 'Ca²⁺ + SO₃²⁻ → CaSO₃↓（白色沉淀）',
+            'Cu²⁺-OH⁻': 'Cu²⁺ + 2OH⁻ → Cu(OH)₂↓（蓝色沉淀）',
+            'Cu²⁺-CO₃²⁻': 'Cu²⁺ + CO₃²⁻ → CuCO₃↓（沉淀）',
+            'Cu²⁺-S²⁻': 'Cu²⁺ + S²⁻ → CuS↓（黑色沉淀）',
+            'NH₄⁺-OH⁻': 'NH₄⁺ + OH⁻ → NH₃↑ + H₂O（加热产生氨气）',
+            'Mg²⁺-OH⁻': 'Mg²⁺ + 2OH⁻ → Mg(OH)₂↓（白色沉淀）',
+            'Mg²⁺-CO₃²⁻': 'Mg²⁺ + CO₃²⁻ → MgCO₃↓（白色沉淀）',
+            'Al³⁺-OH⁻': 'Al³⁺ + 3OH⁻ → Al(OH)₃↓（白色沉淀）',
+            'Al³⁺-CO₃²⁻': 'Al³⁺ + CO₃²⁻ → Al₂(CO₃)₃↓（沉淀）',
+            'Zn²⁺-OH⁻': 'Zn²⁺ + 2OH⁻ → Zn(OH)₂↓（白色沉淀）',
+            'Zn²⁺-CO₃²⁻': 'Zn²⁺ + CO₃²⁻ → ZnCO₃↓（白色沉淀）',
+            'Zn²⁺-S²⁻': 'Zn²⁺ + S²⁻ → ZnS↓（白色沉淀）',
+            'OH⁻-HCO₃⁻': 'OH⁻ + HCO₃⁻ → CO₃²⁻ + H₂O',
+        };
+
+        const key1 = `${ionA.symbol}-${ionB.symbol}`;
+        const key2 = `${ionB.symbol}-${ionA.symbol}`;
+        return reasons[key1] || reasons[key2] || `${ionA.symbol} 与 ${ionB.symbol} 不能共存`;
+    }
+
+    function showModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+
+    function hideModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    // ========== DRAWING ==========
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw background grid
+        drawBackground();
+
+        // Draw falling ions
+        fallingIons.forEach(ion => drawFallingIon(ion));
+
+        // Draw catcher
+        drawCatcher();
+
+        // Draw collected ions preview at bottom
+        drawCollectedPreview();
+    }
+
+    function drawBackground() {
+        // Subtle grid
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 1;
+        const gridSize = 50;
+        for (let x = 0; x < canvas.width; x += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+    }
+
+    function drawFallingIon(ion) {
+        const x = ion.x;
+        const y = ion.y;
+        const radius = 28;
+
+        // Glow effect
+        const glowColor = ion.type === 'cation' ? 'rgba(52, 152, 219, 0.3)' : 'rgba(231, 76, 60, 0.3)';
+        ctx.beginPath();
+        ctx.arc(x, y, radius + 8, 0, Math.PI * 2);
+        ctx.fillStyle = glowColor;
+        ctx.fill();
+
+        // Main circle
+        const gradient = ctx.createRadialGradient(x - 5, y - 5, 5, x, y, radius);
+        if (ion.type === 'cation') {
+            gradient.addColorStop(0, '#5dade2');
+            gradient.addColorStop(1, '#2980b9');
+        } else {
+            gradient.addColorStop(0, '#f1948a');
+            gradient.addColorStop(1, '#c0392b');
+        }
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Ion symbol
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 13px Noto Sans SC';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(ion.symbol, x, y);
+
+        // Charge indicator
+        ctx.font = '10px Noto Sans SC';
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.fillText(ion.type === 'cation' ? '⊕' : '⊖', x, y + 16);
+
+        // Check compatibility indicator (teach mode)
+        if (currentMode === 'teach' && collectedIons.length > 0) {
+            const compatible = canCoexistWithAll(ion);
+            ctx.font = 'bold 16px sans-serif';
+            ctx.fillText(compatible ? '✓' : '✗', x, y - radius - 10);
+            ctx.fillStyle = compatible ? '#2ecc71' : '#e74c3c';
+            ctx.fillText(compatible ? '✓' : '✗', x, y - radius - 10);
+        }
+    }
+
+    function drawCatcher() {
+        const y = canvas.height - 40;
+        const x = catcher.x;
+        const w = catcher.width;
+        const h = catcher.height;
+
+        // Platform glow
+        ctx.shadowColor = 'rgba(102, 126, 234, 0.5)';
+        ctx.shadowBlur = 15;
+
+        // Main platform
+        const gradient = ctx.createLinearGradient(x, y, x + w, y);
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(0.5, '#764ba2');
+        gradient.addColorStop(1, '#667eea');
+
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 10);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+
+        // Label
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 11px Noto Sans SC';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🧪 接收器', x + w / 2, y + h / 2);
+    }
+
+    function drawCollectedPreview() {
+        if (collectedIons.length === 0) return;
+
+        const y = canvas.height - 70;
+        const startX = 10;
+        const size = 20;
+        const gap = 5;
+
+        collectedIons.forEach((ion, i) => {
+            const x = startX + i * (size + gap);
+            ctx.beginPath();
+            ctx.arc(x + size / 2, y, size / 2, 0, Math.PI * 2);
+            ctx.fillStyle = ion.type === 'cation' ? '#3498db' : '#e74c3c';
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 8px Noto Sans SC';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(ion.symbol, x + size / 2, y);
+        });
+    }
+
+    // ========== START ==========
+    document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
