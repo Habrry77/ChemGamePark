@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分子搭建大师 - 游戏介绍</title>
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #9b59b6;
+            --color-secondary: #3498db;
+            --color-accent: #e74c3c;
+            --color-success: #2ecc71;
+            --color-warning: #f39c12;
+            --color-bg-light: #f8f9fa;
+            --color-dark: #2c3e50;
+            --color-gray: #7f8c8d;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-subtitle {
+            font-size: 0.65rem;
+            font-weight: 400;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(155, 89, 182, 0.1);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            padding: 60px 40px;
+            text-align: center;
+            border-bottom: 3px solid rgba(155, 89, 182, 0.2);
+        }
+
+        .game-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-subtitle {
+            font-size: 1.3rem;
+            color: var(--color-gray);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-game-icon {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            box-shadow: 0 15px 40px rgba(155, 89, 182, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .rating-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .rating-title {
+            font-size: 1.1rem;
+            color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .rating-stars .star {
+            color: #ddd;
+            font-size: 2rem;
+            transition: all 0.2s;
+        }
+
+        .rating-stars .star:hover,
+        .rating-stars .star.active {
+            color: #f39c12;
+            transform: scale(1.2);
+        }
+
+        .rating-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .rating-hint {
+            font-size: 0.9rem;
+            color: var(--color-gray);
+            margin-top: 10px;
+        }
+
+        .start-btn-container {
+            margin-top: 20px;
+        }
+
+        .start-game-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, var(--color-accent), #c0392b);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .start-game-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(231, 76, 60, 0.5);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--color-bg-light);
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: var(--color-bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-primary);
+            box-shadow: 0 10px 30px rgba(155, 89, 182, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            color: var(--color-dark);
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--color-gray);
+            line-height: 1.7;
+        }
+
+        .game-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .mode-card {
+            background: linear-gradient(135deg, var(--color-bg-light), white);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid;
+            transition: all 0.3s;
+        }
+
+        .mode-card.classic {
+            border-left-color: var(--color-primary);
+        }
+
+        .mode-card.random {
+            border-left-color: var(--color-accent);
+        }
+
+        .mode-card.challenge {
+            border-left-color: var(--color-success);
+        }
+
+        .mode-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .mode-icon {
+            font-size: 2.5rem;
+        }
+
+        .mode-card h4 {
+            font-size: 1.3rem;
+            color: var(--color-dark);
+            margin: 0;
+        }
+
+        .mode-card p {
+            color: var(--color-gray);
+            line-height: 1.7;
+        }
+
+        .steps-timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .steps-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary));
+            border-radius: 3px;
+        }
+
+        .step-item {
+            position: relative;
+            margin-bottom: 35px;
+            padding: 25px;
+            background: var(--color-bg-light);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .step-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            position: absolute;
+            left: -40px;
+            top: 20px;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 3px 10px rgba(155, 89, 182, 0.3);
+        }
+
+        .step-item h4 {
+            font-size: 1.2rem;
+            color: var(--color-dark);
+            margin-bottom: 10px;
+        }
+
+        .step-item p {
+            color: var(--color-gray);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: var(--color-bg-light);
+            border-radius: 12px;
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .tip-content h4 {
+            font-size: 1.1rem;
+            color: var(--color-dark);
+            margin-bottom: 8px;
+        }
+
+        .tip-content p {
+            color: var(--color-gray);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .footer {
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-section {
+                padding: 40px 20px;
+            }
+
+            .hero-game-icon {
+                width: 120px;
+                height: 120px;
+                font-size: 4rem;
+            }
+
+            .start-game-btn {
+                padding: 15px 40px;
+                font-size: 1.2rem;
+            }
+
+            .section-card {
+                padding: 25px;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .steps-timeline {
+                padding-left: 30px;
+            }
+
+            .step-number {
+                left: -30px;
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section { padding: 30px 15px; }
+            .game-title { font-size: 1.8rem; }
+            .game-subtitle { font-size: 1rem; }
+            .hero-game-icon { width: 100px; height: 100px; font-size: 3.5rem; }
+            .start-game-btn { padding: 14px 30px; font-size: 1.1rem; }
+            .section-card { padding: 20px 15px; }
+            .section-title { font-size: 1.4rem; }
+            .features-grid { grid-template-columns: 1fr; gap: 15px; }
+            .feature-card { padding: 20px; }
+            .feature-icon { font-size: 3rem; }
+            .game-modes { grid-template-columns: 1fr; gap: 15px; }
+            .mode-card { padding: 20px; }
+            .tips-grid { grid-template-columns: 1fr; gap: 12px; }
+            .tip-card { padding: 15px; }
+            .step-number { width: 28px; height: 28px; font-size: 0.9rem; left: -28px; }
+            .steps-timeline { padding-left: 28px; }
+            .step-item { padding: 15px; }
+            .step-item h4 { font-size: 1rem; }
+            .rating-section { padding: 15px 20px; }
+            .rating-stars .star { font-size: 1.5rem; }
+            .rating-value { font-size: 1.4rem; }
+            .logo-text { font-size: 1.1rem; }
+            .logo-subtitle { font-size: 0.55rem; }
+            .back-btn { padding: 6px 12px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🧪</span>
+                <div class="logo-text-wrapper">
+                    <span class="logo-text">化学游戏乐园</span>
+                    <span class="logo-subtitle">ChemGamePark</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1 class="game-title">分子搭建大师</h1>
+        <p class="game-subtitle">使用原子球搭建各种有机和无机分子结构，探索化学的奥秘！</p>
+        
+        <div class="hero-game-icon">⚛️</div>
+        
+        <div class="rating-section">
+            <div class="rating-title">⭐ 给游戏评分</div>
+            <div class="rating-display">
+                <div class="rating-stars" id="ratingStars">
+                    <span class="star" data-rating="1">★</span>
+                    <span class="star" data-rating="2">★</span>
+                    <span class="star" data-rating="3">★</span>
+                    <span class="star" data-rating="4">★</span>
+                    <span class="star" data-rating="5">★</span>
+                </div>
+                <div class="rating-value" id="ratingValue">5.0</div>
+            </div>
+            <div class="rating-hint">点击星星为游戏评分</div>
+        </div>
+
+        <div class="start-btn-container">
+            <a href="game.html" class="start-game-btn">
+                <span>🎮</span>
+                <span>开始游戏</span>
+            </a>
+        </div>
+    </section>
+
+    <div class="main-content">
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon">🎮</div>
+                <h2 class="section-title">游戏特色</h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧱</div>
+                    <h4>拖拽操作</h4>
+                    <p>简单易用的拖拽界面，轻松搭建各种分子结构</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h4>关卡挑战</h4>
+                    <p>从简单到复杂的分子，循序渐进学习化学知识</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h4>知识学习</h4>
+                    <p>每个分子都有详细的中文介绍和实际应用</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎲</div>
+                    <h4>随机挑战</h4>
+                    <p>无限随机关卡，每次游戏都是全新体验</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h4>限时挑战</h4>
+                    <p>在时间压力下考验你的化学知识</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h4>成就系统</h4>
+                    <p>完成各种成就，解锁更多内容</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon">🎯</div>
+                <h2 class="section-title">游戏模式</h2>
+            </div>
+            
+            <div class="game-modes">
+                <div class="mode-card classic">
+                    <div class="mode-header">
+                        <div class="mode-icon">📖</div>
+                        <h4>教学模式</h4>
+                    </div>
+                    <p>按照预设关卡逐步学习，从简单分子到复杂有机物，循序渐进掌握分子搭建技巧。</p>
+                </div>
+                <div class="mode-card random">
+                    <div class="mode-header">
+                        <div class="mode-icon">🎲</div>
+                        <h4>随机挑战</h4>
+                    </div>
+                    <p>系统随机生成分子结构，每次挑战都是全新的组合，考验你的化学直觉和搭建能力！</p>
+                </div>
+                <div class="mode-card challenge">
+                    <div class="mode-header">
+                        <div class="mode-icon">⚡</div>
+                        <h4>计时挑战</h4>
+                    </div>
+                    <p>在限定时间内完成尽可能多的分子搭建，挑战高分榜，成为分子搭建大师！</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon">📖</div>
+                <h2 class="section-title">游戏玩法</h2>
+            </div>
+            
+            <div class="steps-timeline">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <h4>选择游戏模式</h4>
+                    <p>在游戏开始界面选择教学模式、随机挑战或计时挑战三种模式之一开始游戏。</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <h4>查看目标分子</h4>
+                    <p>在右侧信息面板查看目标分子的中文名称、所需原子种类和数量提示。</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <h4>拖拽原子搭建</h4>
+                    <p>从左侧原子面板拖拽所需的原子到中央画布上。所有原子都会用中文标注元素名称。</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <h4>连接形成化学键</h4>
+                    <p>点击一个原子，再点击另一个原子即可连接。切换单键、双键、三键模式构建不同键型。</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <h4>验证完成</h4>
+                    <p>点击验证按钮检查结构是否正确。正确即可获得分数并进入下一关！</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-icon">💡</div>
+                <h2 class="section-title">游戏技巧</h2>
+            </div>
+            
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">💡</div>
+                    <div class="tip-content">
+                        <h4>先规划后搭建</h4>
+                        <p>在拖拽原子前，先观察目标分子的结构特点，规划好原子的大致位置。</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🔄</div>
+                    <div class="tip-content">
+                        <h4>灵活使用双键三键</h4>
+                        <p>碳原子之间的连接常用双键或三键，如乙烯是双键连接，乙炔是三键连接。</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">⏰</div>
+                    <div class="tip-content">
+                        <h4>计时模式要快速</h4>
+                        <p>在计时挑战中，不需要完美对齐，快速完成多个分子比精细搭建更重要。</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <div class="tip-content">
+                        <h4>利用提示功能</h4>
+                        <p>遇到困难时点击提示按钮，系统会给出关键原子的位置提示。</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">🔍</div>
+                    <div class="tip-content">
+                        <h4>注意原子大小</h4>
+                        <p>氢原子较小，碳、氧、氮、硫原子较大，这在搭建时有助于判断原子种类。</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon">📝</div>
+                    <div class="tip-content">
+                        <h4>学习分子知识</h4>
+                        <p>每完成一个分子后，仔细阅读右侧的信息面板，了解该分子的实际应用。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="start-btn-container" style="text-align: center; margin: 40px 0;">
+            <a href="game.html" class="start-game-btn">
+                <span>🎮</span>
+                <span>开始游戏</span>
+            </a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 化学游戏乐园 (ChemGamePark). 探索化学的无限可能。</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentRating = 5.0;
+        let userRating = 0;
+        const totalRatings = 128;
+        const storageKey = 'moleculeBuilderUserRating';
+
+        function initRating() {
+            const storedRating = localStorage.getItem(storageKey);
+            if (storedRating) {
+                userRating = parseInt(storedRating);
+                currentRating = userRating;
+                updateRatingDisplay(userRating);
+            } else {
+                updateRatingDisplay(0);
+            }
+        }
+
+        function updateRatingDisplay(rating) {
+            const stars = document.querySelectorAll('#ratingStars .star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+            document.getElementById('ratingValue').textContent = currentRating.toFixed(1);
+        }
+
+        document.querySelectorAll('#ratingStars .star').forEach(star => {
+            star.addEventListener('mouseenter', () => {
+                const rating = parseInt(star.dataset.rating);
+                const stars = document.querySelectorAll('#ratingStars .star');
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+
+            star.addEventListener('mouseleave', () => {
+                updateRatingDisplay(userRating);
+            });
+
+            star.addEventListener('click', () => {
+                const rating = parseInt(star.dataset.rating);
+                userRating = rating;
+                currentRating = rating;
+                localStorage.setItem(storageKey, rating.toString());
+                updateRatingDisplay(rating);
+                alert(`感谢您的评分！您给出了 ${rating} 颗星！⭐`);
+            });
+        });
+
+        initRating();
+    </script>
+</body>
+</html>
